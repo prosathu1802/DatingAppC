@@ -12,7 +12,6 @@ export class AppComponent implements OnInit {
    link: any;
 
   constructor(private http: HttpClient) {
-
   }
 
   ngOnInit(): void {
