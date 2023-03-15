@@ -18,7 +18,9 @@ namespace API.Extensions
 
                     //authentication header in
                     services.AddCors();
-                    services.AddScoped<ITokenService, TokenService>(); 
+                    services.AddScoped<ITokenService, TokenService>();
+                    services.AddScoped<IUserRepository, UserRepository>();
+                    services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
                     //Dispose the service once end point of the controller is reached, no need this service any further
 
                     return services;
