@@ -21,12 +21,12 @@
                     <p>{{member.age}}</p>
                 </div>
                 <div>
-                    <strong>Location:</strong>
-                    <p>{{member.lastActive}}</p>
+                    <strong>Last Active:</strong>
+                    <p>{{member.lastActive + "Z" | timeago}}</p>
                 </div>
                 <div>
                     <strong>Member since:</strong>
-                    <p>{{member.created}}</p>
+                    <p>{{member.created | date}}</p>
                 </div>
             </div>
             <div class="card-footer">
@@ -41,13 +41,13 @@
             <tab heading="About">
                 <form #editForm="ngForm" (ngSubmit)="updateMember()" id="editForm">
                     <h4 class="mt-2">Description</h4>
-                    <textarea name="introduction" class="form-control" 
+                    <textarea name="introduction" class="form-control"
                     [(ngModel)]="member.introduction" rows="6"></textarea>
                     <h4 class="mt-2">Looking For</h4>
-                    <textarea name="lookingFor" class="form-control" 
+                    <textarea name="lookingFor" class="form-control"
                     [(ngModel)]="member.lookingFor" rows="6"></textarea>
                     <h4 class="mt-2">Interest</h4>
-                    <textarea name="interests" class="form-control" 
+                    <textarea name="interests" class="form-control"
                     [(ngModel)]="member.interests" rows="6"></textarea>
                     <h4 class="mt-2">Location Details: </h4>
                     <div class="d-flex flex-row align-items-center">
@@ -57,10 +57,10 @@
                         <input type="text" [(ngModel)]="member.country" name="country" class="form-control mx-2">
                     </div>
                 </form>
-                
+
             </tab>
             <tab heading="Edit Photos">
-                
+
                 <app-photo-editor [member]="member"></app-photo-editor>
             </tab>
         </tabset>

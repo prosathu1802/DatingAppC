@@ -4,6 +4,7 @@ using API.Data;
 using API.DTOs;
 using API.Entities;
 using API.Extensions;
+using API.Helpers;
 using API.Interfaces;
 using AutoMapper;
 using AutoMapper.Execution;
@@ -22,7 +23,7 @@ namespace API.Controllers
         private readonly IMapper mapper;
         private readonly IPhotoService photoService;
 
-        public UsersController(IUserRepository userRepository, IMapper mapper, 
+        public UsersController(IUserRepository userRepository, IMapper mapper,
                     IPhotoService photoService)
         {
             this.userRepository = userRepository;
@@ -31,9 +32,19 @@ namespace API.Controllers
         }
 
         [HttpGet] //GET /api/users
-        public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsers() {
-            var users = await userRepository.GetMembersAsync();
-            
+        public async Task<ActionResult<PagedList<MemberDto>>> GetUsers([FromQuery]UserParams userParams) {
+            var currentUser = await userRepository.GetUserByUsernameAsync(User.GetUserName());
+            userParams.CurrentUsername = currentUser.UserName;
+
+            if (string.IsNullOrEmpty(userParams.Gender))
+            {
+                userParams.Gender = currentUser.Gender == "male" ? "female" : "male";
+            }
+
+            var users = await userRepository.GetMembersAsync(userParams);
+
+            Response.AddPaginationHeader(new PaginationHeader(users.CurrentPage, users.PageSize, users.TotalCount, users.TotalPages));
+
             return Ok(users);
         }
 
@@ -41,12 +52,12 @@ namespace API.Controllers
         public async Task<ActionResult<MemberDto>> GetUser(string username) {
             return await userRepository.GetMemberByUsernameAsync(username);
         }
-        
+
         [HttpPut]
         public async Task<ActionResult> UpdateUser(MemberUpdateDto memberUpdateDto)
         {
             var user = await userRepository.GetUserByUsernameAsync(User.GetUserName());
-            
+
             if (user == null) return NotFound();
             mapper.Map(memberUpdateDto, user);
 
@@ -76,7 +87,7 @@ namespace API.Controllers
 
             user.Photos.Add(photo);
 
-            if (await userRepository.SaveAllAsync()) 
+            if (await userRepository.SaveAllAsync())
             {
                 return CreatedAtAction(nameof(GetUser), new {username = user.UserName}, mapper.Map<PhotoDto>(photo));
             }
