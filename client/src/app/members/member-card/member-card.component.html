@@ -11,7 +11,9 @@
                     <i class="fa fa-heart"></i>
                 </button>
                 <button class="btn btn-primary">
-                    <i class="fa fa-envelope">
+                    <i class="fa fa-envelope"
+                        [queryParams]="{tab: 'Messages'}"
+                        routerLink="/members/{{member.userName}}">
                     </i>
                 </button>
             </li>
