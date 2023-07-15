@@ -31,6 +31,7 @@ namespace API.Controllers
             this.photoService = photoService;
         }
 
+        //[Authorize(Roles = "Admin")]        //Only Admin can access Get Users
         [HttpGet] //GET /api/users
         public async Task<ActionResult<PagedList<MemberDto>>> GetUsers([FromQuery]UserParams userParams) {
             var currentUser = await userRepository.GetUserByUsernameAsync(User.GetUserName());
@@ -48,6 +49,7 @@ namespace API.Controllers
             return Ok(users);
         }
 
+        //[Authorize(Roles = "Member")]
         [HttpGet("{username}")]
         public async Task<ActionResult<MemberDto>> GetUser(string username) {
             return await userRepository.GetMemberByUsernameAsync(username);
