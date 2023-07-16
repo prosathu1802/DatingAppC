@@ -3,6 +3,7 @@ using API.Data;
 using API.Helpers;
 using API.Interfaces;
 using API.Services;
+using API.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Extensions
@@ -27,7 +28,9 @@ namespace API.Extensions
                     services.AddScoped<IPhotoService, PhotoService>();
                     services.AddScoped<LogUserActivity>();
                     services.AddScoped<ILikesRepository, LikesRepository>();
-                    services.AddScoped<IMessageRepository, MessageRepository>();
+                    services.AddScoped<IMessageRepository, MessageRepository>(); //Destroy when HttpRequest ends
+                    services.AddSignalR();
+                    services.AddSingleton<PresenceTracker>();   //This service needs to live as long as application is running
 
                     return services;
             }

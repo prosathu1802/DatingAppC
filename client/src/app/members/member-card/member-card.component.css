@@ -38,3 +38,13 @@
 li button + button {
     margin-left: 0.5rem;
 }
+
+@keyframes fa-blink {
+    0% {capacity: 1;}
+    100% {capacity: 0.4;}
+}
+
+.is-online {
+    animation: fa-blink 1.5 linear infinite;
+    color: rgb(1, 189, 42);
+}
