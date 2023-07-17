@@ -21,16 +21,14 @@ namespace API.Extensions
                     //authentication header in
                     services.AddCors();
                     services.AddScoped<ITokenService, TokenService>();
-                    services.AddScoped<IUserRepository, UserRepository>();
                     services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
                     //Dispose the service once end point of the controller is reached, no need this service any further
                     services.Configure<CloudinarySettings>(config.GetSection("CloudinarySettings"));
-                    services.AddScoped<IPhotoService, PhotoService>();
+                    services.AddScoped<IPhotoService, PhotoService>();//Destroy when HttpRequest ends
                     services.AddScoped<LogUserActivity>();
-                    services.AddScoped<ILikesRepository, LikesRepository>();
-                    services.AddScoped<IMessageRepository, MessageRepository>(); //Destroy when HttpRequest ends
                     services.AddSignalR();
                     services.AddSingleton<PresenceTracker>();   //This service needs to live as long as application is running
+                    services.AddScoped<IUnitOfWork, UnitOfWork>();
 
                     return services;
             }
