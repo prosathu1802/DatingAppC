@@ -1,4 +1,5 @@
 using API.Entities;
+using AutoMapper.Configuration;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,7 @@ namespace API.Data
         public DbSet<Message> Messages { get; set; }
         public DbSet<Group> Groups { get; set; }
         public DbSet<Connection> Connections { get; set; }
+        public DbSet<Photo> Photos { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -56,6 +58,11 @@ namespace API.Data
                 .HasOne(user => user.Sender)
                 .WithMany(message => message.MessagesSent)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Photo>()
+                .HasQueryFilter(photo => photo.IsApproved);
+
+            
         }
     }
 }

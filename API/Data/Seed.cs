@@ -36,6 +36,7 @@ namespace API.Data
                 // using var hmac = new HMACSHA512();
 
                 user.UserName = user.UserName.ToLower();
+                user.Photos.First().IsApproved = true;
                 // user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes("Pa$$w0rd"));
                 // user.PasswordSalt = hmac.Key;
 
@@ -43,6 +44,7 @@ namespace API.Data
 
                 await userManager.CreateAsync(user, "Pa$$w0rd");    //Create and Save into db
                 await userManager.AddToRoleAsync(user, "Member");
+
             }
 
             var admin = new AppUser

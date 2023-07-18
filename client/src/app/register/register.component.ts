@@ -16,7 +16,7 @@ export class RegisterComponent implements OnInit {
   maxDate: Date = new Date();
   validationErrors: string[] | undefined;
 
-  constructor(private accountService: AccountService, private toastr: ToastrService, 
+  constructor(private accountService: AccountService, private toastr: ToastrService,
                   private fb: FormBuilder, private router: Router) { }
 
   ngOnInit(): void {
@@ -27,7 +27,6 @@ export class RegisterComponent implements OnInit {
   register() {
     const dob = this.geteDateOnly(this.registerForm.controls['dateOfBirth'].value);
     const values = {...this.registerForm.value, dateOfBirth: dob};
-    console.log(values);
     this.accountService.register(values).subscribe({
       next: () => {
         this.router.navigateByUrl('/members')

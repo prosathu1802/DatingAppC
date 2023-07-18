@@ -28,6 +28,7 @@ namespace API.Controllers
         {
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
+            this.photoService = photoService;
         }
 
         //[Authorize(Roles = "Admin")]        //Only Admin can access Get Users
@@ -51,7 +52,10 @@ namespace API.Controllers
         //[Authorize(Roles = "Member")]
         [HttpGet("{username}")]
         public async Task<ActionResult<MemberDto>> GetUser(string username) {
-            return await unitOfWork.UserRepository.GetMemberByUsernameAsync(username);
+            var currentUser = User.GetUserName();
+
+            return await unitOfWork.UserRepository.GetMemberByUsernameAsync(username,
+                isCurrentUser: currentUser == username);
         }
 
         [HttpPut]
@@ -84,7 +88,6 @@ namespace API.Controllers
                 PublicId = result.PublicId
             };
 
-            if (user.Photos.Count == 0) photo.IsMain = true;
 
             user.Photos.Add(photo);
 
@@ -124,7 +127,7 @@ namespace API.Controllers
         {
             var user = await unitOfWork.UserRepository.GetUserByUsernameAsync(User.GetUserName());
 
-            var photo = user.Photos.FirstOrDefault(x => x.Id == photoId);
+            var photo = await unitOfWork.PhotoRepository.GetPhotoById(photoId);
 
             if (photo == null) return NotFound();
 
